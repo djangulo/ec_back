@@ -1,0 +1,5 @@
+python3.6.1
+django-1.11
+djangorestframework
+django-cors-headers
+pillow
