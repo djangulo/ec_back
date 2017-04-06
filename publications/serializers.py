@@ -4,33 +4,6 @@ from rest_framework import serializers
 from . import models
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    works = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-        # view_name='api-v1:works_by_category'
-    )
-    publications = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-        # view_name='api-v1:publications_by_category'
-    )
-    press_releases = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-        # view_name='api-v1:press_releases_by_category'
-    )
-    class Meta:
-        fields = (
-            'id',
-            'name',
-            'description',
-            'works',
-            'press_releases',
-            'publications'
-        )
-
-
 class PressReleaseSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -82,3 +55,31 @@ class PublicationSerializer(serializers.ModelSerializer):
             'image'
         )
         model = models.Publication
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    works = WorkSerializer(
+        many=True,
+        read_only=True,
+        # view_name='api-v1:works_by_category'
+    )
+    publications = PublicationSerializer(
+        many=True,
+        read_only=True,
+        # view_name='api-v1:publications_by_category'
+    )
+    press_releases = PressReleaseSerializer(
+        many=True,
+        read_only=True,
+        # view_name='api-v1:press_releases_by_category'
+    )
+    class Meta:
+        fields = (
+            'id',
+            'name',
+            'description',
+            'works',
+            'press_releases',
+            'publications'
+        )
+        model = models.Category

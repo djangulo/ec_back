@@ -15,9 +15,10 @@ class PublicationsByCategory(generics.ListCreateAPIView):
     serializer_class = serializers.CategorySerializer
     def get_queryset(self):
         category = models.Category.objects.get(
-            pk=self.kwargs['category_id']
+            name=self.kwargs['name']
         )
-        return category.publication_set.all()
+        return category.publications.all()
+        
 
 
 class WorksList(generics.ListCreateAPIView):
