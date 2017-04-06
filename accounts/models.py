@@ -15,10 +15,11 @@ from rest_framework.authtoken.models import Token
 @receiver(post_save, sender="accounts.User")
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        Token.objects.create(user=instance)
+        if instance.is_superuser:
+            Token.objects.create(user=instance)
 
 def user_directory_path(instance, filename):
-    return 'user_photos/user_{}/{}'.format(instance.user.id, filename)
+    return 'user_photos/user_{}/{}'.format(instance.id, filename)
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password, **extra_fields):
@@ -39,6 +40,11 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    STAFF_INTERN_CHOICES = (
+        (0, 'Neither'),
+        (1, 'Estudio Caribe Staff'),
+        (2, 'Estudio Caribe Intern')
+    )
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField()
     first_name = models.CharField(max_length=50, blank=True, default='')
@@ -47,7 +53,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField(default='', blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-
+    staff_or_intern = models.IntegerField(
+        choices=STAFF_INTERN_CHOICES,
+        default=0,
+        verbose_name="Is staff or intern?"
+    )
+        
+    
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'
