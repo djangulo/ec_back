@@ -20,23 +20,6 @@ class PressReleaseSerializer(serializers.ModelSerializer):
         model = models.PressRelease
 
 
-class WorkSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'id',
-            'title',
-            'slug',
-            'description',
-            'category',
-            'document',
-            'team',
-            'status',
-            'program',
-            'created_date',
-            'published_date',
-        )
-        model = models.Work
-
 class WorkPictureSerializer(serializers.ModelSerializer):
     work = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     class Meta:
@@ -49,6 +32,26 @@ class WorkPictureSerializer(serializers.ModelSerializer):
             'is_cover'
         )
         model = models.WorkPicture
+
+
+class WorkSerializer(serializers.ModelSerializer):
+    pictures = WorkPictureSerializer(many=True, read_only=True)
+    class Meta:
+        fields = (
+            'id',
+            'title',
+            'slug',
+            'description',
+            'category',
+            'document',
+            'pictures',
+            'team',
+            'status',
+            'program',
+            'created_date',
+            'published_date',
+        )
+        model = models.Work
 
 
 class PublicationSerializer(serializers.ModelSerializer):
