@@ -1,10 +1,25 @@
 from django.db import models
+from django.template.defaultfilters import slugify
+
 
 def work_directory_path(instance, filename):
-    return 'works_images/work_{}/{}'.format(instance.id, filename)
+    IMAGE_FILE_FORMATS = [
+        '.jpg', '.jpeg', '.jif', '.jfif',
+        '.jp2', '.jpx', '.j2k', '.j2c',
+        '.png',
+        '.tiff', '.tif',
+        '.svg',
+        '.gif',
+        '.pcd',
+        '.bmp',
+    ]
+    for f in IMAGE_FILE_FORMATS:
+        if filename.endswith(f):
+            return 'works/images/work_{}/{}'.format(instance.id, filename)
+    return 'works/files/work_{}/{}'.format(instance.id, filename)
 
 def publication_directory_path(instance, filename):
-    return 'publication_images/pub_{}/{}'.format(instance.id, filename)    
+    return 'publications/images/pub_{}/{}'.format(instance.id, filename)    
 
 
 class Category(models.Model):
@@ -19,18 +34,9 @@ class Category(models.Model):
         return self.name
 
 
-class Media(models.Model):
+class PressRelease(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
-    slug = models.SlugField()
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.title
-
-
-class PressRelease(Media):
     date_released = models.DateField()
     category = models.ForeignKey(
         Category,
@@ -38,17 +44,25 @@ class PressRelease(Media):
         on_delete=models.CASCADE
     )
     url = models.URLField()
-    class Meta(Media.Meta):
+    class Meta:
         verbose_name = 'press release'
         verbose_name_plural = 'press releases'
 
+    def __str__(self):
+        return self.title
 
-class Work(Media):
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(PressRelease, self).save(*args, **kwargs)
+
+class Work(models.Model):
     STATUS_CHOICES = (
         (0, 'Planned'),
         (1, 'Under Construction'),
         (2, 'Completed'),
     )
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=255)
     category = models.ForeignKey(
         Category,
         related_name="works",
@@ -58,10 +72,17 @@ class Work(Media):
     status = models.IntegerField(choices=STATUS_CHOICES)
     team = models.TextField(default='')
     date_released = models.DateField()
-    class Meta(Media.Meta):
+    document = models.FileField(upload_to=work_directory_path, blank=True, null=True)
+    class Meta:
         verbose_name = 'work'
         verbose_name_plural = 'works'
 
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Work, self).save(*args, **kwargs)
 
 class WorkPicture(models.Model):
     title = models.CharField(max_length=100)
@@ -79,14 +100,16 @@ class WorkPicture(models.Model):
             self.work.title
         )
 
-class Publication(Media):
-    TYPE_CHOICES = (
+class Publication(models.Model):
+    MEDIUM_CHOICES = (
         (0, 'Article'),
         (1, 'Review'),
         (2, 'Book'),
         (3, 'Blogpost'),
     )
-    type = models.IntegerField(choices=TYPE_CHOICES, default=0)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=255)
+    medium = models.IntegerField(choices=MEDIUM_CHOICES, default=0)
     category = models.ForeignKey(
         Category,
         related_name="publications",
@@ -97,9 +120,15 @@ class Publication(Media):
         blank=True,
         null=True
     )
-    class Meta(Media.Meta):
+    class Meta:
         verbose_name = 'publication'
         verbose_name_plural = 'publications'
 
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Publication, self).save(*args, **kwargs)
 
 

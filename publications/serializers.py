@@ -9,6 +9,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'slug',
             'description',
             'category',
             'date_released',
@@ -22,11 +23,14 @@ class WorkSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'slug',
             'description',
             'category',
+            'document',
             'team',
             'status',
-            'program'
+            'program',
+            'date_released'
         )
         model = models.Work
 
@@ -51,7 +55,7 @@ class PublicationSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'category',
-            'type',
+            'medium',
             'image'
         )
         model = models.Publication

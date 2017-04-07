@@ -6,7 +6,12 @@ urlpatterns = [
     url(
         r'^publications/category/(?P<name>[\w\s]+)',
         views.PublicationsByCategory.as_view(),
-        name='publications_by_category'
+        name='pub_by_category'
+    ),
+    url(
+        r'^works/category/(?P<name>[\w\s]+)',
+        views.WorksByCategory.as_view(),
+        name='work_by_category'
     ),
     url(
         r'^works$',
