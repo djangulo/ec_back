@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from . import models
 
-class PressReleaseSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'id',
@@ -13,6 +13,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
             'photo',
             'bio',
             'is_active',
-            'is_admin'
+            'is_admin',
+            'staff_or_intern'
         )
         model = models.User

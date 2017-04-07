@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 
 def work_directory_path(instance, filename):
@@ -24,7 +25,7 @@ def publication_directory_path(instance, filename):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, blank=False)
-    description = models.CharField(max_length=255, blank=False)
+    description = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -37,13 +38,14 @@ class Category(models.Model):
 class PressRelease(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
-    date_released = models.DateField()
     category = models.ForeignKey(
         Category,
         related_name="press_releases",
         on_delete=models.CASCADE
     )
-    url = models.URLField()
+    url = models.URLField(blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    published_date = models.DateTimeField(blank=True, null=True)
     class Meta:
         verbose_name = 'press release'
         verbose_name_plural = 'press releases'
@@ -51,9 +53,13 @@ class PressRelease(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(PressRelease, self).save(*args, **kwargs)
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
+
+    def unpublish(self):
+        self.published_date = None
+        self.save()
 
 class Work(models.Model):
     STATUS_CHOICES = (
@@ -62,16 +68,17 @@ class Work(models.Model):
         (2, 'Completed'),
     )
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
     category = models.ForeignKey(
         Category,
         related_name="works",
         on_delete=models.CASCADE
     )
-    program = models.CharField(max_length=75)
+    program = models.CharField(max_length=75, blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES)
-    team = models.TextField(default='')
-    date_released = models.DateField()
+    team = models.TextField(default='', blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    published_date = models.DateTimeField(blank=True, null=True)
     document = models.FileField(upload_to=work_directory_path, blank=True, null=True)
     class Meta:
         verbose_name = 'work'
@@ -80,14 +87,15 @@ class Work(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Work, self).save(*args, **kwargs)
+    @property
+    def slug(self):
+        return slugify(self.title)
+
 
 class WorkPicture(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to=work_directory_path, blank=True, null=True)
-    caption = models.TextField()
+    caption = models.TextField(blank=True)
     work = models.ForeignKey(Work, related_name='pictures')
     is_cover = models.BooleanField(
         default=False,
@@ -95,10 +103,14 @@ class WorkPicture(models.Model):
     )
 
     def __str__(self):
-        return 'Image: {} from Work: {}'.format(
+        return 'Image: {} - {}'.format(
             self.title,
             self.work.title
         )
+
+    @property
+    def slug(self):
+        return slugify(self.title)
 
 class Publication(models.Model):
     MEDIUM_CHOICES = (
@@ -108,7 +120,7 @@ class Publication(models.Model):
         (3, 'Blogpost'),
     )
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
     medium = models.IntegerField(choices=MEDIUM_CHOICES, default=0)
     category = models.ForeignKey(
         Category,
@@ -127,8 +139,6 @@ class Publication(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Publication, self).save(*args, **kwargs)
-
-
+    @property
+    def slug(self):
+        return slugify(self.title)

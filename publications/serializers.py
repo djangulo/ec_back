@@ -1,4 +1,5 @@
 import datetime
+from django.template.defaultfilters import slugify
 from rest_framework import serializers
 
 from . import models
@@ -12,7 +13,8 @@ class PressReleaseSerializer(serializers.ModelSerializer):
             'slug',
             'description',
             'category',
-            'date_released',
+            'created_date',
+            'published_date',
             'url'
         )
         model = models.PressRelease
@@ -30,7 +32,8 @@ class WorkSerializer(serializers.ModelSerializer):
             'team',
             'status',
             'program',
-            'date_released'
+            'created_date',
+            'published_date',
         )
         model = models.Work
 

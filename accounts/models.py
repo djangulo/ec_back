@@ -58,8 +58,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=0,
         verbose_name="Is staff or intern?"
     )
-        
-    
+
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'

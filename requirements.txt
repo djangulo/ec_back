@@ -4,5 +4,6 @@ django-cors-headers==2.0.2
 django-filter==1.0.2
 djangorestframework==3.6.2
 olefile==0.44
+pylint==1.6.5
 Pillow==4.1.0
 pytz==2017.2
