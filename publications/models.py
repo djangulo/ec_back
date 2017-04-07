@@ -61,6 +61,10 @@ class PressRelease(models.Model):
         self.published_date = None
         self.save()
 
+    @property
+    def slug(self):
+        return slugify(self.title)
+
 class Work(models.Model):
     STATUS_CHOICES = (
         (0, 'Planned'),

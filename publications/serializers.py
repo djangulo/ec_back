@@ -59,6 +59,7 @@ class PublicationSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'slug',
             'description',
             'category',
             'medium',
