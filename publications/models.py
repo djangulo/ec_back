@@ -117,15 +117,19 @@ class WorkPicture(models.Model):
         return slugify(self.title)
 
 class Publication(models.Model):
+    ARTICLE = 0
+    REVIEW = 1
+    BOOK = 2
+    BLOGPOST = 3
     MEDIUM_CHOICES = (
-        (0, 'Article'),
-        (1, 'Review'),
-        (2, 'Book'),
-        (3, 'Blogpost'),
+        (ARTICLE, 'Article'),
+        (REVIEW, 'Review'),
+        (BOOK, 'Book'),
+        (BLOGPOST, 'Blogpost'),
     )
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=255, blank=True)
-    medium = models.IntegerField(choices=MEDIUM_CHOICES, default=0)
+    medium = models.IntegerField(choices=MEDIUM_CHOICES, default=ARTICLE)
     category = models.ForeignKey(
         Category,
         related_name="publications",

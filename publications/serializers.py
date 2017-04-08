@@ -33,9 +33,15 @@ class WorkPictureSerializer(serializers.ModelSerializer):
         )
         model = models.WorkPicture
 
+class ChoiceFieldField(serializers.RelatedField):
+    def to_representation(self, instance, obj=None):
+        instan
+
+
 
 class WorkSerializer(serializers.ModelSerializer):
     pictures = WorkPictureSerializer(many=True, read_only=True)
+    category = serializers.StringRelatedField(many=False)
     class Meta:
         fields = (
             'id',
@@ -55,6 +61,7 @@ class WorkSerializer(serializers.ModelSerializer):
 
 
 class PublicationSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField(many=False)
     class Meta:
         fields = (
             'id',
