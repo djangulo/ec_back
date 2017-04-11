@@ -33,9 +33,9 @@ class WorkPictureSerializer(serializers.ModelSerializer):
         )
         model = models.WorkPicture
 
-class ChoiceFieldField(serializers.RelatedField):
-    def to_representation(self, instance, obj=None):
-        instan
+# class ChoiceFieldField(serializers.RelatedField):
+#     def to_representation(self, instance, obj=None):
+#         instan
 
 
 
@@ -76,25 +76,23 @@ class PublicationSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    works = WorkSerializer(
+    works = serializers.PrimaryKeyRelatedField(
         many=True,
-        read_only=True,
-        # view_name='api-v1:works_by_category'
+        read_only=True
     )
-    publications = PublicationSerializer(
+    publications = serializers.PrimaryKeyRelatedField(
         many=True,
-        read_only=True,
-        # view_name='api-v1:publications_by_category'
+        read_only=True
     )
-    press_releases = PressReleaseSerializer(
+    press_releases = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=True,
-        # view_name='api-v1:press_releases_by_category'
     )
     class Meta:
         fields = (
             'id',
             'name',
+            'slug',
             'description',
             'works',
             'press_releases',

@@ -25,6 +25,7 @@ def publication_directory_path(instance, filename):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, blank=False)
+    slug = models.SlugField(max_length=50, blank=False, default='')
     description = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
@@ -37,6 +38,7 @@ class Category(models.Model):
 
 class PressRelease(models.Model):
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, default='')
     description = models.CharField(max_length=255)
     category = models.ForeignKey(
         Category,
@@ -61,9 +63,6 @@ class PressRelease(models.Model):
         self.published_date = None
         self.save()
 
-    @property
-    def slug(self):
-        return slugify(self.title)
 
 class Work(models.Model):
     STATUS_CHOICES = (
@@ -72,6 +71,7 @@ class Work(models.Model):
         (2, 'Completed'),
     )
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, default='')
     description = models.CharField(max_length=255, blank=True)
     category = models.ForeignKey(
         Category,
@@ -91,13 +91,10 @@ class Work(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def slug(self):
-        return slugify(self.title)
-
 
 class WorkPicture(models.Model):
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, default='')
     image = models.ImageField(upload_to=work_directory_path, blank=True, null=True)
     caption = models.TextField(blank=True)
     work = models.ForeignKey(Work, related_name='pictures')
@@ -112,9 +109,6 @@ class WorkPicture(models.Model):
             self.work.title
         )
 
-    @property
-    def slug(self):
-        return slugify(self.title)
 
 class Publication(models.Model):
     ARTICLE = 0
@@ -128,6 +122,7 @@ class Publication(models.Model):
         (BLOGPOST, 'Blogpost'),
     )
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, default='')
     description = models.CharField(max_length=255, blank=True)
     medium = models.IntegerField(choices=MEDIUM_CHOICES, default=ARTICLE)
     category = models.ForeignKey(
@@ -146,7 +141,3 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
-
-    @property
-    def slug(self):
-        return slugify(self.title)

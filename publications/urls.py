@@ -4,12 +4,12 @@ from . import views
 
 urlpatterns = [
     url(
-        r'^publications/category/(?P<name>[\w\s]+)/',
+        r'^publications/categories/(?P<slug>[-_.\w]+)/',
         views.PublicationsByCategory.as_view(),
         name='pub_by_category'
     ),
     url(
-        r'^works/category/(?P<name>[\w\s]+)/',
+        r'^works/categories/(?P<slug>[-_.\w]+)/',
         views.WorksByCategory.as_view(),
         name='work_by_category'
     ),
@@ -42,5 +42,10 @@ urlpatterns = [
         r'^press_release/(?P<pk>\d+)/$',
         views.PublicationsViewSet.as_view({'get': 'retrieve'}),
         name='pub_detail'
+    ),
+    url(
+        r'^categories/$',
+        views.CategoryViewSet.as_view({'get': 'list'}),
+        name='categories'
     ),
 ]
