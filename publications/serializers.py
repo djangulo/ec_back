@@ -4,6 +4,32 @@ from rest_framework import serializers
 
 from . import models
 
+class CategorySerializer(serializers.ModelSerializer):
+    # works = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True
+    # )
+    # publications = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True
+    # )
+    # press_releases = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True,
+    # )
+    class Meta:
+        fields = (
+            'id',
+            'name',
+            'slug',
+            'description',
+            'works',
+            'press_releases',
+            'publications'
+        )
+        model = models.Category
+
+
 
 class PressReleaseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,7 +67,7 @@ class WorkPictureSerializer(serializers.ModelSerializer):
 
 class WorkSerializer(serializers.ModelSerializer):
     pictures = WorkPictureSerializer(many=True, read_only=True)
-    category = serializers.StringRelatedField(many=False)
+    category = CategorySerializer(many=False, read_only=True)
     class Meta:
         fields = (
             'id',
@@ -76,18 +102,18 @@ class PublicationSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    works = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True
-    )
-    publications = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True
-    )
-    press_releases = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-    )
+    # works = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True
+    # )
+    # publications = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True
+    # )
+    # press_releases = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     read_only=True,
+    # )
     class Meta:
         fields = (
             'id',
