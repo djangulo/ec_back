@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 
@@ -20,13 +22,14 @@ def work_directory_path(instance, filename):
     return 'works/files/work_{}/{}'.format(instance.id, filename)
 
 def publication_directory_path(instance, filename):
-    return 'publications/images/pub_{}/{}'.format(instance.id, filename)    
+    return 'publications/images/pub_{}/{}'.format(instance.id, filename)
 
 
 class Category(models.Model):
     name = models.CharField(max_length=50, blank=False)
     slug = models.SlugField(max_length=50, blank=False, default='')
     description = models.CharField(max_length=255, blank=True, default='')
+
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -62,7 +65,6 @@ class PressRelease(models.Model):
     def unpublish(self):
         self.published_date = None
         self.save()
-
 
 class Work(models.Model):
     STATUS_CHOICES = (

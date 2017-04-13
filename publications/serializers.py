@@ -5,10 +5,6 @@ from rest_framework import serializers
 from . import models
 
 class CategorySerializer(serializers.ModelSerializer):
-    # works = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True
-    # )
     # publications = serializers.PrimaryKeyRelatedField(
     #     many=True,
     #     read_only=True
@@ -32,13 +28,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PressReleaseSerializer(serializers.ModelSerializer):
+    category_id = serializers.CharField(source='category.id', read_only=True)
+    category_slug = serializers.CharField(source='category.slug', read_only=True)
     class Meta:
         fields = (
             'id',
             'title',
             'slug',
             'description',
-            'category',
+            'category_id',
+            'category_slug',
             'created_date',
             'published_date',
             'url'
@@ -67,14 +66,18 @@ class WorkPictureSerializer(serializers.ModelSerializer):
 
 class WorkSerializer(serializers.ModelSerializer):
     pictures = WorkPictureSerializer(many=True, read_only=True)
-    category = CategorySerializer(many=False, read_only=True)
+    # category = CategorySerializer(many=False, read_only=True)
+    category_id = serializers.CharField(source='category.id', read_only=True)
+    category_slug = serializers.CharField(source='category.slug', read_only=True)
+    status = serializers.CharField(source='get_status_display', read_only=True)
     class Meta:
         fields = (
             'id',
             'title',
             'slug',
             'description',
-            'category',
+            'category_id',
+            'category_slug',
             'document',
             'pictures',
             'team',
@@ -87,14 +90,17 @@ class WorkSerializer(serializers.ModelSerializer):
 
 
 class PublicationSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField(many=False)
+    category_id = serializers.CharField(source='category.id', read_only=True)
+    category_slug = serializers.CharField(source='category.slug', read_only=True)
+    medium = serializers.CharField(source='get_medium_display')
     class Meta:
         fields = (
             'id',
             'title',
             'slug',
             'description',
-            'category',
+            'category_id',
+            'category_slug',
             'medium',
             'image'
         )

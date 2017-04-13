@@ -42,8 +42,8 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     STAFF_INTERN_CHOICES = (
         (0, 'Neither'),
-        (1, 'Estudio Caribe Staff'),
-        (2, 'Estudio Caribe Intern')
+        (1, 'Staff'),
+        (2, 'Intern')
     )
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField()

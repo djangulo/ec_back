@@ -34,12 +34,12 @@ urlpatterns = [
         name='pub_detail'
     ),
     url(
-        r'^press-releases/$',
+        r'^press/$',
         views.PressReleaseViewSet.as_view({'get': 'list'}),
         name='press_release_list'
     ),
     url(
-        r'^press_release/(?P<pk>\d+)/$',
+        r'^press/(?P<pk>\d+)/$',
         views.PublicationsViewSet.as_view({'get': 'retrieve'}),
         name='pub_detail'
     ),
