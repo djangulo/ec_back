@@ -17,7 +17,7 @@ class PublicationsByCategory(generics.ListAPIView):
     model = models.Publication
     serializer_class = serializers.PublicationSerializer
     def get_queryset(self):
-        category = models.Category.objects.get(
+        category = models.Category.publication_categories.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.publications.all()
@@ -28,7 +28,7 @@ class WorksByCategory(generics.ListAPIView):
     serializer_class = serializers.WorkSerializer
     def get_queryset(self):
         print(self.kwargs)
-        category = models.Category.objects.get(
+        category = models.Category.work_categories.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.works.all()
@@ -39,6 +39,28 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = models.Category.objects.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = [IsSuperUser]
+
+
+class WorkCategoryViewSet(viewsets.ModelViewSet):
+    model = models.Category
+    queryset = models.Category.work_categories.all()
+    serializer_class = serializers.CategorySerializer
+    permission_classes = [IsSuperUser]
+
+
+class PublicationCategoryViewSet(viewsets.ModelViewSet):
+    model = models.Category
+    queryset = models.Category.publication_categories.all()
+    serializer_class = serializers.CategorySerializer
+    permission_classes = [IsSuperUser]
+
+
+class PressCategoryViewSet(viewsets.ModelViewSet):
+    model = models.Category
+    queryset = models.Category.press_categories.all()
+    serializer_class = serializers.CategorySerializer
+    permission_classes = [IsSuperUser]
+
 
 
 class WorksViewSet(viewsets.ModelViewSet):

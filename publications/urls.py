@@ -3,16 +3,7 @@ from django.conf.urls import url, include
 from . import views
 
 urlpatterns = [
-    url(
-        r'^publications/categories/(?P<slug>[-_.\w]+)/',
-        views.PublicationsByCategory.as_view(),
-        name='pub_by_category'
-    ),
-    url(
-        r'^works/categories/(?P<slug>[-_.\w]+)/',
-        views.WorksByCategory.as_view(),
-        name='work_by_category'
-    ),
+    # Works URLs
     url(
         r'^works/$',
         views.WorksViewSet.as_view({'get': 'list'}),
@@ -24,6 +15,17 @@ urlpatterns = [
         name='work_detail'
     ),
     url(
+        r'^works/categories/$',
+        views.WorkCategoryViewSet.as_view({'get': 'list'}),
+        name='work-categories'
+    ),
+    url(
+        r'^works/categories/(?P<slug>[-_.\w]+)/',
+        views.WorksByCategory.as_view(),
+        name='work_by_category'
+    ),
+    # Publications URLs
+    url(
         r'^publications/$',
         views.PublicationsViewSet.as_view({'get': 'list'}),
         name='pub_list'
@@ -34,6 +36,17 @@ urlpatterns = [
         name='pub_detail'
     ),
     url(
+        r'^publications/categories/$',
+        views.PublicationCategoryViewSet.as_view({'get': 'list'}),
+        name='publication-categories'
+    ),
+    url(
+        r'^publications/categories/(?P<slug>[-_.\w]+)/',
+        views.PublicationsByCategory.as_view(),
+        name='pub_by_category'
+    ),
+    # Press URLs
+    url(
         r'^press/$',
         views.PressReleaseViewSet.as_view({'get': 'list'}),
         name='press_release_list'
@@ -42,6 +55,11 @@ urlpatterns = [
         r'^press/(?P<pk>\d+)/$',
         views.PublicationsViewSet.as_view({'get': 'retrieve'}),
         name='pub_detail'
+    ),
+    url(
+        r'^press/categories/$',
+        views.PressCategoryViewSet.as_view({'get': 'list'}),
+        name='press-categories'
     ),
     url(
         r'^categories/$',

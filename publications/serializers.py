@@ -1,5 +1,4 @@
 import datetime
-from django.template.defaultfilters import slugify
 from rest_framework import serializers
 
 from . import models
@@ -18,10 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'id',
             'name',
             'slug',
-            'description',
-            'works',
-            'press_releases',
-            'publications'
+            'description'
         )
         model = models.Category
 
