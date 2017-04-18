@@ -1,0 +1,52 @@
+<h1>This is the Estudio Caribe back end</h1>
+<p>This will never be shown to users, and this page will dissapear once it's finished.</p>
+<p>This two-part system prevents <a href="http://estudiocaribe.djangulo.com">estudiocaribe</a> 
+vistors to access your database, protecting any sensitive data. It also handles all authentications and throttling of requests;
+ for instance, no captcha is needed for the contact form, as this "server" will handle all security concerns. This back end will live
+ securely in the same server as the front end, "server" its just a term for a different system.
+</p>
+
+<br>
+<p>Below is a drill down of the api, in case you want to see how it works</p>
+
+<ul>
+    <li>
+        <ul>
+            <h4>Works</h4>
+            <li><a href="http://ec.djangulo.com/api/v1/works">All works</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/works/1">Individual work (indexed by database ID)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/works/categories">Work categories</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/works/categories/architecture">Works under "Architecture categories"</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/works/categories/research">Works under "Research categories"</a></li>
+        </ul>
+    </li>
+    <li>
+        <ul>
+            <h4>Publications</h4>
+            <li><a href="http://ec.djangulo.com/api/v1/publications">All publications</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/publications/1">Individual publication (indexed by database ID)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/publications/categories">Publication categories</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/publications/categories/architecture">Publications under "Architecture categories"</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/publications/categories/exhibition">Publications under "exhibition categories"</a></li>
+        </ul>
+    </li>
+    <li>
+        <ul>
+            <h4>Press</h4>
+            <p>This part still needs to be indexed by year/month</p>
+            <li><a href="http://ec.djangulo.com/api/v1/press">All press releases (currently empty)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/press/1">Individual press release (indexed by database ID)(currently empty)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/press/categories">Press release categories</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/press/categories/architecture">Press releases under "Architecture categories"</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/press/categories/exhibition">Works under "exhibition categories"</a></li>
+        </ul>
+    </li>
+    <li>
+        <ul>
+            <h4>Staff</h4>
+            <li><a href="http://ec.djangulo.com/api/v1/staff">All staff (currently empty)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/staff/rhf">Individual staff member (Ruben) (indexed by username)</a></li>
+            <li><a href="http://ec.djangulo.com/api/v1/staff/irina">Individual staff member (Irina) (indexed by username)</a></li>
+        </ul>
+    </li>
+</ul>

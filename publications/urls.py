@@ -53,7 +53,7 @@ urlpatterns = [
     ),
     url(
         r'^press/(?P<pk>\d+)/$',
-        views.PublicationsViewSet.as_view({'get': 'retrieve'}),
+        views.PressReleaseViewSet.as_view({'get': 'retrieve'}),
         name='pub_detail'
     ),
     url(
