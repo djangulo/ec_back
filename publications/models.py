@@ -1,9 +1,7 @@
 from django.db import models
-from django.db.models import Count
-from django.shortcuts import get_object_or_404
-from django.template.defaultfilters import slugify
 from django.utils import timezone
 
+from .support_models import Category, Medium, Program, Status
 
 def work_directory_path(instance, filename):
     IMAGE_FILE_FORMATS = [
@@ -25,52 +23,10 @@ def publication_directory_path(instance, filename):
     return 'publications/images/pub_{}/{}'.format(instance.id, filename)
 
 
-class WorksCategoryManager(models.Manager):
-    def get_queryset(self):
-        return super(
-            WorksCategoryManager,
-            self
-        ).get_queryset().filter(works__isnull=False).distinct()
-
-         
-class PublicationCategoryManager(models.Manager):
-    def get_queryset(self):
-        return super(
-            PublicationCategoryManager,
-            self
-        ).get_queryset().filter(publications__isnull=False).distinct()
-
-
-class PressReleaseCategoryManager(models.Manager):
-    def get_queryset(self):
-        return super(
-            PressReleaseCategoryManager,
-            self
-        ).get_queryset().filter(press_releases__isnull=False).distinct()
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=50, blank=False)
-    slug = models.SlugField(max_length=50, blank=False, default='')
-    description = models.CharField(max_length=255, blank=True, default='')
-
-    objects = models.Manager()
-    work_categories = WorksCategoryManager()
-    publication_categories = PublicationCategoryManager()
-    press_categories = PressReleaseCategoryManager()
-
-    class Meta:
-        verbose_name_plural = 'categories'
-        ordering = ('name',)
-
-    def __str__(self):
-        return self.name
-
-
 class Item(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, blank=False, default='')
-    description = models.CharField(max_length=255, blank=True, default='')
+    description = models.TextField(max_length=500, blank=True, default='')
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
@@ -88,6 +44,13 @@ class Item(models.Model):
         self.published_date = None
         self.save()
 
+    def _is_published(self):
+        if self.published_date is not None:
+            return True
+        return False
+    _is_published.boolean = True
+    is_published = property(_is_published)
+
 
 class PressRelease(Item):
     category = models.ForeignKey(
@@ -95,7 +58,7 @@ class PressRelease(Item):
         related_name="press_releases",
         on_delete=models.CASCADE
     )
-    url = models.URLField(blank=True)
+    url = models.URLField(blank=True, help_text="URL to external resource or additional info")
 
     class Meta(Item.Meta):
         verbose_name = 'press release'
@@ -107,21 +70,21 @@ class Work(Item):
     team: Leave as Text in case of collaborations with external companies
     Change to ManyToManyField after consulting with owner
     """
-    PLANNED = 0
-    UNDER_CONSTRUCTION = 1
-    COMPLETED = 2
-    STATUS_CHOICES = (
-        (PLANNED, 'Planned'),
-        (UNDER_CONSTRUCTION, 'Under Construction'),
-        (COMPLETED, 'Completed'),
-    )
     category = models.ForeignKey(
         Category,
         related_name="works",
         on_delete=models.CASCADE
     )
-    program = models.CharField(max_length=75, blank=True)
-    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, default=0)
+    program = models.ForeignKey(
+        Program,
+        related_name="works",
+        on_delete=models.CASCADE
+    )
+    status = models.ForeignKey(
+        Status,
+        related_name="works",
+        on_delete=models.CASCADE
+    )
     team = models.TextField(default='', blank=True)
     document = models.FileField(upload_to=work_directory_path, blank=True, null=True)
     class Meta(Item.Meta):
@@ -148,17 +111,11 @@ class WorkPicture(models.Model):
 
 
 class Publication(Item):
-    ARTICLE = 0
-    REVIEW = 1
-    BOOK = 2
-    BLOGPOST = 3
-    MEDIUM_CHOICES = (
-        (ARTICLE, 'Article'),
-        (REVIEW, 'Review'),
-        (BOOK, 'Book'),
-        (BLOGPOST, 'Blogpost'),
+    medium = models.ForeignKey(
+        Medium,
+        related_name="publications",
+        on_delete=models.CASCADE
     )
-    medium = models.IntegerField(choices=MEDIUM_CHOICES, blank=True, default=ARTICLE)
     category = models.ForeignKey(
         Category,
         related_name="publications",

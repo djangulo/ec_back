@@ -9,76 +9,77 @@ from rest_framework.response import Response
 
 from .permissions import IsSuperUser
 
-from . import models
+from .models import PressRelease, Publication, Work, WorkPicture
+from .support_models import Category, Medium, Program, Status
 from . import serializers
 
 
 class PublicationsByCategory(generics.ListAPIView):
-    model = models.Publication
+    model = Publication
     serializer_class = serializers.PublicationSerializer
     def get_queryset(self):
-        category = models.Category.publication_categories.get(
+        category = Category.publication_categories.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.publications.all()
 
 
 class WorksByCategory(generics.ListAPIView):
-    model = models.Work
+    model = Work
     serializer_class = serializers.WorkSerializer
     def get_queryset(self):
         print(self.kwargs)
-        category = models.Category.work_categories.get(
+        category = Category.work_categories.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.works.all()
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    model = models.Category
-    queryset = models.Category.objects.all()
+    model = Category
+    queryset = Category.objects.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = [IsSuperUser]
 
 
 class WorkCategoryViewSet(viewsets.ModelViewSet):
-    model = models.Category
-    queryset = models.Category.work_categories.all()
+    model = Category
+    queryset = Category.work_items.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = [IsSuperUser]
 
 
 class PublicationCategoryViewSet(viewsets.ModelViewSet):
-    model = models.Category
-    queryset = models.Category.publication_categories.all()
+    model = Category
+    queryset = Category.publication_items.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = [IsSuperUser]
 
 
 class PressCategoryViewSet(viewsets.ModelViewSet):
-    model = models.Category
-    queryset = models.Category.press_categories.all()
+    model = Category
+    queryset = Category.press_items.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = [IsSuperUser]
 
 
 
 class WorksViewSet(viewsets.ModelViewSet):
-    model = models.Work
-    queryset = models.Work.objects.all()
+    model = Work
+    queryset = Work.objects.all()
     serializer_class = serializers.WorkSerializer
     permission_classes = [IsSuperUser]
 
 
 class PublicationsViewSet(viewsets.ModelViewSet):
-    model = models.Publication
-    queryset = models.Publication.objects.all()
+    model = Publication
+    queryset = Publication.objects.all()
     serializer_class = serializers.PublicationSerializer
     permission_classes = [IsSuperUser]
 
 
 class PressReleaseViewSet(viewsets.ModelViewSet):
-    model = models.PressRelease
-    queryset = models.PressRelease.objects.all()
+    model = PressRelease
+    queryset = PressRelease.objects.all()
     serializer_class = serializers.PressReleaseSerializer
     permissions_classes = [IsSuperUser]

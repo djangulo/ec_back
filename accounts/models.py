@@ -40,13 +40,18 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    NEITHER = 0
+    STAFF = 1
+    INTERN = 2
+    BOTH = 3
     STAFF_INTERN_CHOICES = (
-        (0, 'Neither'),
-        (1, 'Staff'),
-        (2, 'Intern')
+        (NEITHER, 'Neither'),
+        (STAFF, 'Staff'),
+        (INTERN, 'Intern'),
+        (BOTH, 'Both')
     )
     username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(blank=True)
     first_name = models.CharField(max_length=50, blank=True, default='')
     last_name = models.CharField(max_length=50, blank=True, default='')
     photo = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
@@ -55,17 +60,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     staff_or_intern = models.IntegerField(
         choices=STAFF_INTERN_CHOICES,
-        default=0,
-        verbose_name="Is staff or intern?"
+        default=NEITHER,
+        verbose_name="Is staff, intern or both?"
     )
 
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [
-        'email'
-    ]
+    REQUIRED_FIELDS = []
 
     def get_full_name(self):
         return '{} {} <{}>'.format(

@@ -1,7 +1,9 @@
 import datetime
 from rest_framework import serializers
 
-from . import models
+from .models import PressRelease, Publication, Work, WorkPicture
+from .support_models import Category, Medium, Program, Status
+
 
 class CategorySerializer(serializers.ModelSerializer):
     # publications = serializers.PrimaryKeyRelatedField(
@@ -19,8 +21,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'slug',
             'description'
         )
-        model = models.Category
-
+        model = Category
 
 
 class PressReleaseSerializer(serializers.ModelSerializer):
@@ -38,7 +39,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
             'published_date',
             'url'
         )
-        model = models.PressRelease
+        model = PressRelease
 
 
 class WorkPictureSerializer(serializers.ModelSerializer):
@@ -52,20 +53,15 @@ class WorkPictureSerializer(serializers.ModelSerializer):
             'work',
             'is_cover'
         )
-        model = models.WorkPicture
-
-# class ChoiceFieldField(serializers.RelatedField):
-#     def to_representation(self, instance, obj=None):
-#         instan
-
+        model = WorkPicture
 
 
 class WorkSerializer(serializers.ModelSerializer):
     pictures = WorkPictureSerializer(many=True, read_only=True)
-    # category = CategorySerializer(many=False, read_only=True)
     category_id = serializers.CharField(source='category.id', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
-    status = serializers.CharField(source='get_status_display', read_only=True)
+    status = serializers.CharField(source='status.slug', read_only=True)
+    program = serializers.CharField(source='program.slug', read_only=True)
     class Meta:
         fields = (
             'id',
@@ -82,13 +78,14 @@ class WorkSerializer(serializers.ModelSerializer):
             'created_date',
             'published_date',
         )
-        model = models.Work
+        model = Work
 
 
 class PublicationSerializer(serializers.ModelSerializer):
     category_id = serializers.CharField(source='category.id', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
-    medium = serializers.CharField(source='get_medium_display')
+    medium_id = serializers.CharField(source='medium.id', read_only=True)
+    medium_slug = serializers.CharField(source='medium.slug', read_only=True)
     class Meta:
         fields = (
             'id',
@@ -97,33 +94,8 @@ class PublicationSerializer(serializers.ModelSerializer):
             'description',
             'category_id',
             'category_slug',
-            'medium',
+            'medium_id',
+            'medium_slug',
             'image'
         )
-        model = models.Publication
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    # works = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True
-    # )
-    # publications = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True
-    # )
-    # press_releases = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True,
-    # )
-    class Meta:
-        fields = (
-            'id',
-            'name',
-            'slug',
-            'description',
-            'works',
-            'press_releases',
-            'publications'
-        )
-        model = models.Category
+        model = Publication
