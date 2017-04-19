@@ -18,7 +18,7 @@ class PublicationsByCategory(generics.ListAPIView):
     model = Publication
     serializer_class = serializers.PublicationSerializer
     def get_queryset(self):
-        category = Category.publication_categories.get(
+        category = Category.publication_items.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.publications.all()
@@ -29,7 +29,7 @@ class WorksByCategory(generics.ListAPIView):
     serializer_class = serializers.WorkSerializer
     def get_queryset(self):
         print(self.kwargs)
-        category = Category.work_categories.get(
+        category = Category.work_items.get(
             slug__iexact=self.kwargs['slug']
         )
         return category.works.all()

@@ -51,6 +51,7 @@ class PublicationAdmin(admin.ModelAdmin):
         'description',
         'image',
         'category',
+        'medium',
         'published_date',
     )
     prepopulated_fields = {'slug': ('title',)}

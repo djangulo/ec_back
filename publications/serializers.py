@@ -6,20 +6,27 @@ from .support_models import Category, Medium, Program, Status
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    # publications = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True
-    # )
-    # press_releases = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     read_only=True,
-    # )
+    publications = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True
+    )
+    press_releases = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )
+    works = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )    
     class Meta:
         fields = (
             'id',
             'name',
             'slug',
-            'description'
+            'description',
+            'publications',
+            'works',
+            'press_releases'
         )
         model = Category
 
@@ -43,7 +50,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
 
 
 class WorkPictureSerializer(serializers.ModelSerializer):
-    work = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    work = serializers.CharField(source='work.title', read_only=True)
     class Meta:
         fields = (
             'id',
