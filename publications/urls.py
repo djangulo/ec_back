@@ -7,12 +7,12 @@ urlpatterns = [
     url(
         r'^works/$',
         views.WorksViewSet.as_view({'get': 'list'}),
-        name='work_list'
+        name='work-list'
     ),
     url(
         r'^works/(?P<pk>\d+)/$',
         views.WorksViewSet.as_view({'get': 'retrieve'}),
-        name='work_detail'
+        name='work-detail'
     ),
     url(
         r'^works/categories/$',
@@ -22,18 +22,18 @@ urlpatterns = [
     url(
         r'^works/categories/(?P<slug>[-_.\w]+)/',
         views.WorksByCategory.as_view(),
-        name='work_by_category'
+        name='works-by-category'
     ),
     # Publications URLs
     url(
         r'^publications/$',
         views.PublicationsViewSet.as_view({'get': 'list'}),
-        name='pub_list'
+        name='publication-list'
     ),
     url(
         r'^publications/(?P<pk>\d+)/$',
         views.PublicationsViewSet.as_view({'get': 'retrieve'}),
-        name='pub_detail'
+        name='publication-detail'
     ),
     url(
         r'^publications/categories/$',
@@ -43,18 +43,18 @@ urlpatterns = [
     url(
         r'^publications/categories/(?P<slug>[-_.\w]+)/',
         views.PublicationsByCategory.as_view(),
-        name='pub_by_category'
+        name='publications-by-category'
     ),
     # Press URLs
     url(
         r'^press/$',
-        views.PressReleaseViewSet.as_view({'get': 'list'}),
-        name='press_release_list'
+        views.PressViewSet.as_view({'get': 'list'}),
+        name='press-list'
     ),
     url(
         r'^press/(?P<pk>\d+)/$',
-        views.PressReleaseViewSet.as_view({'get': 'retrieve'}),
-        name='pub_detail'
+        views.PressViewSet.as_view({'get': 'retrieve'}),
+        name='press-detail'
     ),
     url(
         r'^press/categories/$',

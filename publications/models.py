@@ -52,10 +52,10 @@ class Item(models.Model):
     is_published = property(_is_published)
 
 
-class PressRelease(Item):
+class Press(Item):
     category = models.ForeignKey(
         Category,
-        related_name="press_releases",
+        related_name="presses",
         on_delete=models.CASCADE
     )
     url = models.URLField(blank=True, help_text="URL to external resource or additional info")
@@ -90,23 +90,49 @@ class Work(Item):
     class Meta(Item.Meta):
         verbose_name = 'work'
         verbose_name_plural = 'works'
-
+        
 
 class WorkPicture(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, blank=False, default='')
     image = models.ImageField(upload_to=work_directory_path, blank=True, null=True)
     caption = models.TextField(blank=True)
-    work = models.ForeignKey(Work, related_name='pictures')
-    is_cover = models.BooleanField(
-        default=False,
-        help_text="If yes, this image will be the cover of the 'Work' entry it belongs to."
+    work = models.ForeignKey(
+        Work,
+        related_name='pictures',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
 
     def __str__(self):
-        return 'Image: {} - {}'.format(
-            self.title,
-            self.work.title
+        return 'Image of {} - {}'.format(
+            self.work.title,
+            self.title
+        )
+        
+class WorkCover(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, default='')
+    image = models.ImageField(upload_to=work_directory_path, blank=True, null=True)
+    caption = models.TextField(blank=True)
+    work = models.OneToOneField(
+        Work,
+        related_name='cover',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    
+    
+    class Meta:
+        verbose_name = 'cover'
+        verbose_name_plural = 'cover'
+    
+    def __str__(self):
+        return 'Cover Image of {}: {}'.format(
+            self.work.title,
+            self.title
         )
 
 

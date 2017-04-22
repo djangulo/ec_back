@@ -1,12 +1,17 @@
 from django.contrib import admin
 from django.urls import reverse
 
-from .models import PressRelease, Publication, Work, WorkPicture
+from .models import Press, Publication, Work, WorkCover, WorkPicture
 from .support_models import Category, Medium, Program, Status
 
 
 class WorkPictureInline(admin.StackedInline):
     model = WorkPicture
+    extra = 1
+    prepopulated_fields = {'slug': ('title',)}
+    
+class WorkCoverInline(admin.StackedInline):
+    model = WorkCover
     extra = 1
     prepopulated_fields = {'slug': ('title',)}
 
@@ -25,7 +30,7 @@ class WorkAdmin(admin.ModelAdmin):
     list_filter = ('created_date', 'category', 'program', 'status',)
     list_display = ('title', 'category', 'program', 'status', 'published_date', '_is_published',)
     list_editable = ('category', 'status', 'program', 'published_date',)
-    inlines = [WorkPictureInline]
+    inlines = [WorkCoverInline, WorkPictureInline]
 
 
 class WorkPictureAdmin(admin.ModelAdmin):
@@ -35,13 +40,27 @@ class WorkPictureAdmin(admin.ModelAdmin):
         'image',
         'caption',
         'work',
-        'is_cover',
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('work', 'title',)
     list_filter = ('work',)
-    list_display = ('title', 'work', 'is_cover',)
-    list_editable = ('work', 'is_cover',)
+    list_display = ('title', 'work',)
+    list_editable = ('work',)
+
+
+class WorkCoverAdmin(admin.ModelAdmin):
+    fields = (
+        'title',
+        'slug',
+        'image',
+        'caption',
+        'work',
+    )
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('work', 'title',)
+    list_filter = ('work',)
+    list_display = ('title', 'work',)
+    list_editable = ('work',)
 
 
 class PublicationAdmin(admin.ModelAdmin):
@@ -61,7 +80,7 @@ class PublicationAdmin(admin.ModelAdmin):
     list_editable = ('category','medium', 'published_date',)
 
 
-class PressReleaseAdmin(admin.ModelAdmin):
+class PressAdmin(admin.ModelAdmin):
     fields = (
         'title',
         'slug',
@@ -95,9 +114,10 @@ class ProgramAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Work, WorkAdmin)
-admin.site.register(PressRelease, PressReleaseAdmin)
+admin.site.register(Press, PressAdmin)
 admin.site.register(Publication, PublicationAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(WorkCover, WorkCoverAdmin)
 admin.site.register(WorkPicture, WorkPictureAdmin)
 admin.site.register(Program, ProgramAdmin)
 admin.site.register(Status, StatusAdmin)

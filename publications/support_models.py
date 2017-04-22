@@ -17,12 +17,12 @@ class PublicationItemsManager(models.Manager):
         ).get_queryset().filter(publications__isnull=False).distinct()
 
 
-class PressReleaseItemsManager(models.Manager):
+class PressItemsManager(models.Manager):
     def get_queryset(self):
         return super(
-            PressReleaseItemsManager,
+            PressItemsManager,
             self
-        ).get_queryset().filter(press_releases__isnull=False).distinct()
+        ).get_queryset().filter(presses__isnull=False).distinct()
 
 
 class SupportModel(models.Model):
@@ -33,7 +33,7 @@ class SupportModel(models.Model):
     objects = models.Manager()
     work_items = WorkItemsManager()
     publication_items = PublicationItemsManager()
-    press_items = PressReleaseItemsManager()
+    press_items = PressItemsManager()
 
     class Meta:
         abstract = True
@@ -47,8 +47,8 @@ class SupportModel(models.Model):
     def all_publications_list(self):
         return sorted([(p.id, p.title) for p in self.publications.all()])
 
-    def all_press_releases_list(self):
-        return sorted([(p.id, p.title) for p in self.press_releases.all()])
+    def all_presses_list(self):
+        return sorted([(p.id, p.title) for p in self.presses.all()])
 
 
 class Medium(SupportModel):

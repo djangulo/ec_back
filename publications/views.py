@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from .permissions import IsSuperUser
 
-from .models import PressRelease, Publication, Work, WorkPicture
+from .models import Press, Publication, Work, WorkPicture
 from .support_models import Category, Medium, Program, Status
 from . import serializers
 
@@ -78,8 +78,8 @@ class PublicationsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
 
 
-class PressReleaseViewSet(viewsets.ModelViewSet):
-    model = PressRelease
-    queryset = PressRelease.objects.all()
-    serializer_class = serializers.PressReleaseSerializer
+class PressViewSet(viewsets.ModelViewSet):
+    model = Press
+    queryset = Press.objects.all()
+    serializer_class = serializers.PressSerializer
     permissions_classes = [IsSuperUser]
