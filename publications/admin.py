@@ -23,6 +23,7 @@ class WorkAdmin(admin.ModelAdmin):
         'category',
         'program',
         'status',
+        'team',
         'published_date',
     )
     prepopulated_fields = {'slug': ('title',)}

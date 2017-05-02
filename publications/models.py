@@ -16,11 +16,12 @@ def work_directory_path(instance, filename):
     ]
     for file_format in IMAGE_FILE_FORMATS:
         if filename.endswith(file_format):
-            return 'works/images/work_{}/{}'.format(instance.id, filename)
+            return 'works/images/work_{}/{}'.format(instance.work_id, filename)
+            
     return 'works/files/work_{}/{}'.format(instance.id, filename)
 
 def publication_directory_path(instance, filename):
-    return 'publications/images/pub_{}/{}'.format(instance.id, filename)
+    return 'publications/images/publication_{}/{}'.format(instance.id, filename)
 
 
 class Item(models.Model):

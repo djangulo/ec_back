@@ -19,7 +19,10 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
             Token.objects.create(user=instance)
 
 def user_directory_path(instance, filename):
-    return 'user_photos/user_{}/{}'.format(instance.id, filename)
+    return 'user_photos/user_{}/{}'.format(
+        instance.username,
+        filename
+    )
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password, **extra_fields):

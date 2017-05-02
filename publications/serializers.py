@@ -79,8 +79,33 @@ class WorkCoverSerializer(serializers.ModelSerializer):
         model = WorkCover
 
 
+class ShortCoverSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('image',)
+        model = WorkCover
+
+
+class WorksByCategorySerializer(serializers.ModelSerializer):
+    category= serializers.CharField(source='category.slug', read_only=True)
+    status = serializers.CharField(source='status.slug', read_only=True)
+    program = serializers.CharField(source='program.slug', read_only=True)
+    cover = ShortCoverSerializer(read_only=True)
+    class Meta:
+        fields = (
+            'id',
+            'title',
+            'category',
+            'cover',
+            'team',
+            'status',
+            'program',
+            'published_date',
+        )
+        model = Work
+
+
 class WorkSerializer(serializers.ModelSerializer):
-    # pictures = WorkPictureSerializer(many=True, read_only=True)
+    pictures = WorkPictureSerializer(many=True, read_only=True)
     category_id = serializers.CharField(source='category.id', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
     status = serializers.CharField(source='status.slug', read_only=True)
