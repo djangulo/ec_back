@@ -10,7 +10,7 @@ from . import serializers
 
 class UserViewSet(viewsets.ModelViewSet):
     model = models.User
-    queryset = models.User.objects.filter(Q(staff_or_intern=1) | Q(staff_or_intern=2))
+    queryset = models.User.objects.filter(Q(staff_or_intern=1) | Q(staff_or_intern=2) | Q(staff_or_intern=3))
     serializer_class = serializers.UserSerializer
     permission_classes = [IsSuperUser]
     lookup_field = 'username'

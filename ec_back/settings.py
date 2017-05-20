@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0va7xs&z75veh2(edlm*!++5fr4ns91ym*gz=k*i%ql=m=ov%g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['ec.djangulo.com', 'djangulo.com']
 

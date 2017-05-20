@@ -9,11 +9,12 @@ class HomeAdmin(admin.ModelAdmin):
         'slug',
         'image',
         'caption',
-        'order'
+        'display_order',
+        'parallax'
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'caption',)
-    list_display = ('title', 'order',)
-    list_editable = ('order',)
+    list_display = ('title', 'display_order', 'parallax')
+    list_editable = ('display_order', 'parallax')
 
 admin.site.register(HomeImage, HomeAdmin)

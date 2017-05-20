@@ -66,12 +66,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=NEITHER,
         verbose_name="Is staff, intern or both?"
     )
+    display_order = models.IntegerField(default=0)
+    linked_in = models.URLField(default='', blank=True)
+    facebook = models.URLField(default='', blank=True)
+    instagram = models.URLField(default='', blank=True)
 
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
+
+    class Meta:
+        ordering = ('display_order', 'last_name', 'first_name',)
 
     def get_full_name(self):
         return '{} {} <{}>'.format(

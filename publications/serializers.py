@@ -47,7 +47,8 @@ class PressSerializer(serializers.ModelSerializer):
             'category_slug',
             'created_date',
             'published_date',
-            'url'
+            'url',
+            'display_order',
         )
         model = Press
 
@@ -100,6 +101,7 @@ class WorksByCategorySerializer(serializers.ModelSerializer):
             'status',
             'program',
             'published_date',
+            'display_order',
         )
         model = Work
 
@@ -127,8 +129,11 @@ class WorkSerializer(serializers.ModelSerializer):
             'program',
             'created_date',
             'published_date',
+            'display_order',
         )
         model = Work
+        
+        
 
 
 class PublicationSerializer(serializers.ModelSerializer):
@@ -136,6 +141,7 @@ class PublicationSerializer(serializers.ModelSerializer):
     category_slug = serializers.CharField(source='category.slug', read_only=True)
     medium_id = serializers.CharField(source='medium.id', read_only=True)
     medium_slug = serializers.CharField(source='medium.slug', read_only=True)
+    medium_name = serializers.CharField(source='medium.name', read_only=True)
     class Meta:
         fields = (
             'id',
@@ -146,6 +152,9 @@ class PublicationSerializer(serializers.ModelSerializer):
             'category_slug',
             'medium_id',
             'medium_slug',
-            'image'
+            'medium_name',
+            'url',
+            'image',
+            'display_order',
         )
         model = Publication

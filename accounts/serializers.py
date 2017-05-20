@@ -20,7 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
             'bio',
             'is_active',
             'is_admin',
-            'staff_or_intern'
+            'staff_or_intern',
+            'display_order'
         )
         model = models.User
 

@@ -11,6 +11,6 @@ class HomeImageSerializer(serializers.ModelSerializer):
             'slug',
             'image',
             'caption',
-            'order'
+            'display_order'
         )
         model = HomeImage

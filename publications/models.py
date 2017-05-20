@@ -30,6 +30,7 @@ class Item(models.Model):
     description = models.TextField(max_length=500, blank=True, default='')
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+    display_order = models.IntegerField(default=0)
 
     class Meta:
         abstract = True
@@ -153,6 +154,7 @@ class Publication(Item):
         blank=True,
         null=True
     )
+    url = models.URLField(blank=True, help_text="URL to external resource or additional info")
     class Meta(Item.Meta):
         verbose_name = 'publication'
         verbose_name_plural = 'publications'

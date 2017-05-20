@@ -24,13 +24,15 @@ class WorkAdmin(admin.ModelAdmin):
         'program',
         'status',
         'team',
+        'document',
         'published_date',
+        'display_order'
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'category', 'program', 'status',)
     list_filter = ('created_date', 'category', 'program', 'status',)
-    list_display = ('title', 'category', 'program', 'status', 'published_date', '_is_published',)
-    list_editable = ('category', 'status', 'program', 'published_date',)
+    list_display = ('title', 'display_order', 'category', 'program', 'status', 'published_date', '_is_published',)
+    list_editable = ('category', 'status', 'program', 'published_date', 'display_order',)
     inlines = [WorkCoverInline, WorkPictureInline]
 
 
@@ -61,7 +63,7 @@ class WorkCoverAdmin(admin.ModelAdmin):
     search_fields = ('work', 'title',)
     list_filter = ('work',)
     list_display = ('title', 'work',)
-    list_editable = ('work',)
+    list_editable = ('work', )
 
 
 class PublicationAdmin(admin.ModelAdmin):
@@ -72,13 +74,15 @@ class PublicationAdmin(admin.ModelAdmin):
         'image',
         'category',
         'medium',
+        'url',
         'published_date',
+        'display_order',
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'category',)
     list_filter = ('created_date', 'category',)
-    list_display = ('title', 'category', 'medium', 'published_date', '_is_published',)
-    list_editable = ('category','medium', 'published_date',)
+    list_display = ('title', 'display_order','category', 'medium', 'published_date', '_is_published',)
+    list_editable = ('category','medium', 'published_date', 'display_order', )
 
 
 class PressAdmin(admin.ModelAdmin):
@@ -89,12 +93,13 @@ class PressAdmin(admin.ModelAdmin):
         'url',
         'category',
         'published_date',
+        'display_order'
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'category',)
     list_filter = ('created_date', 'category',)
-    list_display = ('title', 'category', 'published_date', '_is_published',)
-    list_editable = ('category', 'published_date',)
+    list_display = ('title', 'display_order', 'category', 'published_date', '_is_published',)
+    list_editable = ('category', 'published_date', 'display_order')
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
