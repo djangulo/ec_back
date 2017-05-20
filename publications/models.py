@@ -17,11 +17,14 @@ def work_directory_path(instance, filename):
     for file_format in IMAGE_FILE_FORMATS:
         if filename.endswith(file_format):
             return 'works/images/work_{}/{}'.format(instance.work_id, filename)
-            
     return 'works/files/work_{}/{}'.format(instance.id, filename)
 
 def publication_directory_path(instance, filename):
     return 'publications/images/publication_{}/{}'.format(instance.id, filename)
+
+def press_directory_path(instance, filename):
+    print(instance.id, filename, instance.__dict__)
+    return 'press/kits/press_{}/{}'.format(instance.id, filename)
 
 
 class Item(models.Model):
@@ -61,6 +64,7 @@ class Press(Item):
         on_delete=models.CASCADE
     )
     url = models.URLField(blank=True, help_text="URL to external resource or additional info")
+    press_kit = models.FileField(upload_to=press_directory_path, blank=True, null=True)
 
     class Meta(Item.Meta):
         verbose_name = 'press release'
