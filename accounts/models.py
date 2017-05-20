@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name="Is staff, intern or both?"
     )
     display_order = models.IntegerField(default=0)
-    linked_in = models.URLField(default='', blank=True)
+    linkedin = models.URLField(default='', blank=True)
     facebook = models.URLField(default='', blank=True)
     instagram = models.URLField(default='', blank=True)
 
