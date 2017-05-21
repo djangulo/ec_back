@@ -63,7 +63,7 @@ urlpatterns = [
     ),
     url(
         r'^press/archive/$',
-        views.PressArchiveDatesViewSet.as_view({'get': 'list'}),
+        views.PressArchiveDatesViewSet.as_view(),
         name='press-archive'
     ),
     url(

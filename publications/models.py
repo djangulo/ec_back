@@ -60,12 +60,25 @@ class Item(models.Model):
     _is_published.boolean = True
     is_published = property(_is_published)
 
-class PressDatesManager(models.Manager):
-    def get_queryset(self):
-        return super(
-            PressDatesManager,
-            self
-        ).get_queryset().dates('published_date', 'month')
+class PressManager(models.Manager):
+    def get_dates(self):
+        months = super(
+                PressManager,
+                self
+            ).get_queryset().dates('published_date', 'month')
+        years = super(
+                PressManager,
+                self
+            ).get_queryset().dates('published_date', 'year')
+        date_dict = {}
+        for year in years:
+            date_dict[
+                str(year.year)
+            ] = {
+                month.month: month.strftime('%B') \
+                for month in months if year.year == month.year
+            }
+        return date_dict
 
 
 class Press(Item):
@@ -77,19 +90,11 @@ class Press(Item):
     url = models.URLField(blank=True, help_text="URL to external resource or additional info")
     press_kit = models.FileField(upload_to=press_directory_path, blank=True, null=True)
 
-    objects = models.Manager()
-    archive_dates = PressDatesManager()
+    objects = PressManager()
 
     class Meta(Item.Meta):
         verbose_name = 'press release'
         verbose_name_plural = 'press releases'
-
-    def get_year_month(self):
-        return {
-            'year': self.published_date.year,
-            'month': self.published_date.month
-        }
-
 
 class Work(Item):
     """

@@ -35,16 +35,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PressDateSerializer(serializers.Serializer):
-    dates = serializers.SerializerMethodField()
+    dates = serializers.DictField(source='get_dates', read_only=True)
     
     class Meta:
+        fields = ('dates',)
         model = Press
-
-    def get_dates(self, obj):
-        return {
-            'year': obj.year,
-            'month': obj.month,
-        }
 
 
 class PressSerializer(serializers.ModelSerializer):

@@ -63,11 +63,11 @@ class PressLatestViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
 
 
-class PressArchiveDatesViewSet(viewsets.ModelViewSet):
-    model = Press
-    queryset = Press.archive_dates.all()
-    serializer_class = serializers.PressDateSerializer
+class PressArchiveDatesViewSet(generics.ListAPIView):
+    queryset = Press.objects.get_dates()
     permission_classes = [IsSuperUser]
+    def get(self, request, *args, **kwargs):
+        return Response(self.queryset)
 
 
 class PressByDateViewSet(generics.ListAPIView):
@@ -77,13 +77,6 @@ class PressByDateViewSet(generics.ListAPIView):
         return Press.objects.filter(
             published_date__year=self.kwargs['year']
         ).filter(published_date__month=self.kwargs['month'])
-
-
-class PressArchiveDatesViewSet(viewsets.ModelViewSet):
-    model = Press
-    queryset = Press.archive_dates.all()
-    serializer_class = serializers.PressDateSerializer
-    permission_classes = [IsSuperUser]
 
 
 class WorksViewSet(viewsets.ModelViewSet):
