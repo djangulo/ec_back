@@ -79,9 +79,11 @@ class PressManager(models.Manager):
         for year in _years:
             tempdict = {}
             tempdict['year'] = year.year
-            tempdict['months'] = [{'name': month.strftime('%B'), 'id': month.month} for month in _months]
+            tempdict['months'] = {
+                month.strftime('%B'): month.month  \
+                for month in _months if year.year == month.year
+            }
             response['results'].append(tempdict)
-            response['count'] = len(response['results'])
         return response
 
 
