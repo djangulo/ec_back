@@ -71,7 +71,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook = models.URLField(default='', blank=True)
     instagram = models.URLField(default='', blank=True)
 
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'

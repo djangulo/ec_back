@@ -34,6 +34,19 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
 
 
+class PressDateSerializer(serializers.Serializer):
+    dates = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Press
+
+    def get_dates(self, obj):
+        return {
+            'year': obj.year,
+            'month': obj.month,
+        }
+
+
 class PressSerializer(serializers.ModelSerializer):
     category_id = serializers.CharField(source='category.id', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
@@ -48,6 +61,7 @@ class PressSerializer(serializers.ModelSerializer):
             'created_date',
             'published_date',
             'url',
+            'press_kit',
             'display_order',
         )
         model = Press

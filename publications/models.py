@@ -23,8 +23,12 @@ def publication_directory_path(instance, filename):
     return 'publications/images/publication_{}/{}'.format(instance.id, filename)
 
 def press_directory_path(instance, filename):
-    print(instance.id, filename, instance.__dict__)
-    return 'press/kits/press_{}/{}'.format(instance.id, filename)
+    return 'press/kits/{}-{}/{}-{}'.format(
+        instance.created_date.year,
+        instance.created_date.month,
+        instance.title,
+        filename
+    )
 
 
 class Item(models.Model):
@@ -56,6 +60,13 @@ class Item(models.Model):
     _is_published.boolean = True
     is_published = property(_is_published)
 
+class PressDatesManager(models.Manager):
+    def get_queryset(self):
+        return super(
+            PressDatesManager,
+            self
+        ).get_queryset().dates('published_date', 'month')
+
 
 class Press(Item):
     category = models.ForeignKey(
@@ -66,9 +77,18 @@ class Press(Item):
     url = models.URLField(blank=True, help_text="URL to external resource or additional info")
     press_kit = models.FileField(upload_to=press_directory_path, blank=True, null=True)
 
+    objects = models.Manager()
+    archive_dates = PressDatesManager()
+
     class Meta(Item.Meta):
         verbose_name = 'press release'
         verbose_name_plural = 'press releases'
+
+    def get_year_month(self):
+        return {
+            'year': self.published_date.year,
+            'month': self.published_date.month
+        }
 
 
 class Work(Item):
@@ -134,7 +154,7 @@ class WorkCover(models.Model):
     class Meta:
         verbose_name = 'cover'
         verbose_name_plural = 'cover'
-    
+        
     def __str__(self):
         return 'Cover Image of {}: {}'.format(
             self.work.title,

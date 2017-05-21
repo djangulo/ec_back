@@ -57,9 +57,19 @@ urlpatterns = [
         name='press-detail'
     ),
     url(
-        r'^press/categories/$',
-        views.PressCategoryViewSet.as_view({'get': 'list'}),
-        name='press-categories'
+        r'^press/latest/$',
+        views.PressLatestViewSet.as_view({'get': 'list'}),
+        name='press-latest'
+    ),
+    url(
+        r'^press/archive/$',
+        views.PressArchiveDatesViewSet.as_view({'get': 'list'}),
+        name='press-archive'
+    ),
+    url(
+        r'^press/archive/(?P<year>\d+)/(?P<month>\d+)/$',
+        views.PressByDateViewSet.as_view(),
+        name='press-by-date'
     ),
     url(
         r'^categories/$',

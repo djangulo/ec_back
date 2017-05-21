@@ -91,6 +91,7 @@ class PressAdmin(admin.ModelAdmin):
         'slug',
         'description',
         'url',
+        'press_kit',
         'category',
         'published_date',
         'display_order'

@@ -56,12 +56,34 @@ class PublicationCategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
 
 
-class PressCategoryViewSet(viewsets.ModelViewSet):
-    model = Category
-    queryset = Category.press_items.all()
-    serializer_class = serializers.CategorySerializer
+class PressLatestViewSet(viewsets.ModelViewSet):
+    model = Press
+    queryset = Press.objects.order_by('-published_date')[:10]
+    serializer_class = serializers.PressSerializer
     permission_classes = [IsSuperUser]
 
+
+class PressArchiveDatesViewSet(viewsets.ModelViewSet):
+    model = Press
+    queryset = Press.archive_dates.all()
+    serializer_class = serializers.PressDateSerializer
+    permission_classes = [IsSuperUser]
+
+
+class PressByDateViewSet(generics.ListAPIView):
+    model = Press
+    serializer_class = serializers.PressSerializer
+    def get_queryset(self):
+        return Press.objects.filter(
+            published_date__year=self.kwargs['year']
+        ).filter(published_date__month=self.kwargs['month'])
+
+
+class PressArchiveDatesViewSet(viewsets.ModelViewSet):
+    model = Press
+    queryset = Press.archive_dates.all()
+    serializer_class = serializers.PressDateSerializer
+    permission_classes = [IsSuperUser]
 
 
 class WorksViewSet(viewsets.ModelViewSet):
