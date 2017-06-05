@@ -24,7 +24,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/', include('publications.urls', namespace='apiv1')),
     url(r'^api/v1/staff/', include('accounts.urls')),
+    url(r'^api/v1/home-text/', include('home_images.urls')),
     url(r'^api/v1/home-images/', include('home_images.urls')),
-    # url(r'^$', views.Home.as_view(), name='home'),
+    url(r'^home-text/edit', views.home_text_edit, name='home-text-edit'),
+    url(r'^home-text/', views.home_text, name='home-text'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
