@@ -25,18 +25,20 @@ def user_directory_path(instance, filename):
     )
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password, **extra_fields):
+    def create_user(self, email, username, password, **extra_fields):
+        if not email:
+            raise ValueError('Users must have a valid email address')
         if not username:
-            raise ValueError('The given username must be set')
+            username = self.models.normalize_username(email.split('@')[0])
         email = self.normalize_email(email)
         username = self.model.normalize_username(username)
-        user = self.model(username=username, email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
         
-    def create_superuser(self, username, email, password, **extra_fields):
-        user = self.create_user(username=username, email=email, password=password)
+    def create_superuser(self, email, username, password, **extra_fields):
+        user = self.create_user(email=email, username=username, password=password)
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -53,8 +55,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         (INTERN, 'Intern'),
         (BOTH, 'Both')
     )
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(blank=True)
+    email = models.EmailField(blank=False, unique=True)
+    username = models.CharField(max_length=50, unique=True)
     first_name = models.CharField(max_length=50, blank=True, default='')
     last_name = models.CharField(max_length=50, blank=True, default='')
     photo = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
@@ -70,8 +72,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def get_full_name(self):
         return '{} {} <{}>'.format(

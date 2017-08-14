@@ -25,23 +25,22 @@ SECRET_KEY = '0va7xs&z75veh2(edlm*!++5fr4ns91ym*gz=k*i%ql=m=ov%g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec.djangulo.com', 'djangulo.com']
+ALLOWED_HOSTS = ['ec.djangulo.com', 'djangulo.com', 'localhost']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'accounts',
     'rest_framework',
     'rest_framework.authtoken',
+    'accounts',
     'publications',
-    'home_images',
 ]
 
 MIDDLEWARE = [
@@ -153,7 +152,6 @@ FIXTURE_DIRS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     # 'DEFAULT_PERMISSION_CLASSES': (
@@ -165,12 +163,10 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/minute',
-        'user': '300/minute'
+        'anon': '1000/hour',
+        'user': '1000/minute',
+        'authtoken': '10/minute',
     }
 }
 

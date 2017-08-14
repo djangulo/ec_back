@@ -17,14 +17,35 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
 
-from . import views
+from accounts.api import UserViewSet, obtain_throttled_auth_token
+from publications.api import (
+    CategoryViewSet,
+    PressViewSet,
+    PublicationViewSet,
+    StatusViewSet,
+    MediumViewSet,
+    WorkViewSet,
+    WorkPictureViewSet,
+)
+from accounts.api import UserViewSet
+
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'statuses', StatusViewSet)
+router.register(r'mediums', MediumViewSet)
+router.register(r'statuses', StatusViewSet)
+router.register(r'press', PressViewSet)
+router.register(r'publications', PublicationViewSet)
+router.register(r'works', WorkViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'work-pictures', WorkPictureViewSet)
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^api/v1/', include('publications.urls', namespace='apiv1')),
-    url(r'^api/v1/staff/', include('accounts.urls')),
-    url(r'^api/v1/home-images/', include('home_images.urls')),
-    url(r'^$', views.Home.as_view(), name='home'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^api/v2/auth/', obtain_throttled_auth_token, name='get-token'),
+    url(r'^api/v2/', include(router.urls)),
+] 
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
