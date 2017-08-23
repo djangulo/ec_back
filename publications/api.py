@@ -70,9 +70,10 @@ class StatusViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
     @detail_route(methods=['get'], url_path='works')
-    def get_works(self, request, pk=None):
+    def get_works(self, request, slug=None):
         status = self.get_object()
         works = status.works.all()
         result_page = self.paginate_queryset(works)
@@ -88,9 +89,10 @@ class MediumViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
     @detail_route(methods=['get'], url_path='publications')
-    def get_works(self, request, pk=None):
+    def get_works(self, request, slug=None):
         medium = self.get_object()
         publications = medium.publications.all()
         result_page = self.paginate_queryset(publications)
@@ -106,6 +108,7 @@ class PressViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
 
 class PublicationViewSet(viewsets.ModelViewSet):
@@ -115,6 +118,7 @@ class PublicationViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
 
 class WorkViewSet(viewsets.ModelViewSet):
@@ -124,9 +128,10 @@ class WorkViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
     @detail_route(methods=['get'], url_path='pictures')
-    def get_pictures(self, request, pk=None):
+    def get_pictures(self, request, slug=None):
         work = self.get_object()
         pictures = work.pictures.all()
         result_page = WorkPictureSerializer(
