@@ -33,9 +33,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
         IsSuperUser,
     )
+    lookup_field = 'slug'
 
     @detail_route(methods=['get'], url_path='works')
-    def get_works(self, request, pk=None):
+    def get_works(self, request, slug=None):
         category = self.get_object()
         works = category.works.all()
         result_page = self.paginate_queryset(works)
@@ -44,7 +45,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     @detail_route(methods=['get'], url_path='press')
-    def get_presses(self, request, pk=None):
+    def get_presses(self, request, slug=None):
         category = self.get_object()
         presses = category.presses.all()
         result_page = self.paginate_queryset(presses)
@@ -53,7 +54,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     @detail_route(methods=['get'], url_path='publications')
-    def get_publications(self, request, pk=None):
+    def get_publications(self, request, slug=None):
         category = self.get_object()
         publications = category.publications.all()
         result_page = self.paginate_queryset(publications)
