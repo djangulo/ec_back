@@ -55,12 +55,6 @@ class Status(SupportModel):
         
 
 class Program(SupportModel):
-    category = models.ForeignKey(
-        'Category',
-        related_name="programs",
-        on_delete=models.CASCADE,
-        blank=True
-    )
     class Meta(SupportModel.Meta):
         verbose_name = 'program'
         verbose_name_plural = 'programs'
@@ -150,7 +144,8 @@ class Work(Item):
         if not cover:
             return None
         else:
-            return cover[0]
+            self.cover = cover[0]
+            return self.cover
 
     def set_cover(self, picture_id):
         for picture in self.pictures.all():

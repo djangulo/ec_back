@@ -39,9 +39,8 @@ class MediumSerializer(SupportModelSerializer):
 
 
 class ProgramSerializer(SupportModelSerializer):
-    category
     class Meta(SupportModelSerializer.Meta):
-        model = Medium
+        model = Program
 
 
 class PressSerializer(serializers.ModelSerializer):
@@ -51,7 +50,6 @@ class PressSerializer(serializers.ModelSerializer):
             'title',
             'slug',
             'description',
-            'category',
             'category',
             'created_date',
             'published_date',
@@ -85,7 +83,11 @@ class WorkPictureSerializer(serializers.ModelSerializer):
         
 
 class WorkSerializer(serializers.ModelSerializer):
-    cover = WorkCoverSerializer(many=False)
+    cover = WorkCoverSerializer(
+        source='get_cover',
+        many=False,
+        read_only=True
+    )
     class Meta:
         fields = (
             'id',
@@ -93,8 +95,8 @@ class WorkSerializer(serializers.ModelSerializer):
             'slug',
             'description',
             'category',
-            'document',
             'cover',
+            'document',
             'team',
             'status',
             'program',

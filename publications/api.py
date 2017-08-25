@@ -9,6 +9,7 @@ from publications.models import (
     Category,
     Medium,
     Press,
+    Program,
     Publication,
     Status,
     Work,
@@ -19,6 +20,7 @@ from publications.serializers import (
     CategorySerializer,
     MediumSerializer,
     PressSerializer,
+    ProgramSerializer,
     PublicationSerializer,
     StatusSerializer,
     WorkSerializer,
@@ -92,11 +94,30 @@ class MediumViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
     @detail_route(methods=['get'], url_path='publications')
-    def get_works(self, request, slug=None):
+    def get_publications(self, request, slug=None):
         medium = self.get_object()
         publications = medium.publications.all()
         result_page = self.paginate_queryset(publications)
         serializer = PublicationSerializer(
+            result_page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
+
+class ProgramViewSet(viewsets.ModelViewSet):
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
+    permission_classes = (
+        IsAuthenticatedOrReadOnly,
+        IsSuperUser,
+    )
+    lookup_field = 'slug'
+
+    @detail_route(methods=['get'], url_path='works')
+    def get_works(self, request, slug=None):
+        program = self.get_object()
+        publications = program.publications.all()
+        result_page = self.paginate_queryset(publications)
+        serializer = WorkSerializer(
             result_page, many=True, context={'request': request})
         return self.get_paginated_response(serializer.data)
 

@@ -23,6 +23,7 @@ from accounts.api import UserViewSet, obtain_throttled_auth_token
 from publications.api import (
     CategoryViewSet,
     PressViewSet,
+    ProgramViewSet,
     PublicationViewSet,
     StatusViewSet,
     MediumViewSet,
@@ -36,6 +37,7 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'statuses', StatusViewSet)
 router.register(r'mediums', MediumViewSet)
 router.register(r'statuses', StatusViewSet)
+router.register(r'programs', ProgramViewSet)
 router.register(r'press', PressViewSet)
 router.register(r'publications', PublicationViewSet)
 router.register(r'works', WorkViewSet)
